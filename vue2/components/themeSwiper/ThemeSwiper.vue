@@ -25,8 +25,7 @@ export default {
   created() {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      this.isDarkMode = savedTheme === "dark";
-      this.position = savedTheme === "dark" ? "right" : "left";
+      this.position = savedTheme;
     } else {
       this.position = "center";
     }
@@ -35,6 +34,7 @@ export default {
     return {
       isDarkMode: false,
       position: "center",
+      prevPosition: ""
     };
   },
   computed: {
@@ -54,17 +54,17 @@ export default {
   },
   methods: {
     toggleTheme() {
-      if (this.position === "center") {
-        this.position = "right";
-        this.isDarkMode = true;
+      if (this.position === "left") {
+        this.position = "center";
+        this.prevPosition = "left"
+      } else if (this.position === "center") {
+        this.position = this.prevPosition === "right" ? "left" : "right";
       } else if (this.position === "right") {
-        this.position = "left";
-        this.isDarkMode = false;
-      } else {
-        this.position = "right";
-        this.isDarkMode = true;
+        this.position = "center";
+        this.prevPosition = "right"
       }
-      localStorage.setItem("theme", this.isDarkMode ? "dark" : "light");
+
+      localStorage.setItem("theme", this.position);
     },
   },
 };
